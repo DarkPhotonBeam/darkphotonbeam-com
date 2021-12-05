@@ -195,12 +195,12 @@ export default function Home() {
                 {
                     frequencyData.map((amp, i) => (
                         <Bar key={i} position={[(-(i-6) * 3) - 1.5, 0, -40]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * .15)}, ${parseInt(meshColor[1]* .15)}, ${parseInt(meshColor[2]* .15)})`} />
-                    )).slice(-28, 28).reverse()
+                    )).slice(-30, 30).reverse()
                 }
                 {
                     frequencyData.map((amp, i) => (
                         <Bar key={i} position={[((i-6) * 3) + 1.5, 0, -40]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * .15)}, ${parseInt(meshColor[1]* .15)}, ${parseInt(meshColor[2]* .15)})`} />
-                    )).slice(-28, 28)
+                    )).slice(-30, 30)
                 }
                 <Box rotationSpeed={volumeAvg * .005} color={`rgb(${meshColor[0]}, ${meshColor[1]}, ${meshColor[2]})`} scale={meshScale} position={[0, 0, -20]}/>
                 {/*<EffectComposer>*/}
