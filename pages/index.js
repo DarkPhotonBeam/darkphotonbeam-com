@@ -21,6 +21,9 @@ const playlist = [
     '/audio/buildVersion01.mp3',
     '/audio/circlesVersion02.mp3',
     '/audio/dawn.mp3',
+    '/audio/goodMorningGoodNight.mp3',
+    '/audio/woodsVersion01.mp3',
+    '/audio/projectEuroMirVersion03.mp3',
 ];
 
 const euler = 2.71828182846;
@@ -191,12 +194,12 @@ export default function Home() {
                 <pointLight position={[10, 10, 10]}/>
                 {
                     frequencyData.map((amp, i) => (
-                        <Bar key={i} position={[(-(i-6) * 3) - 1.5, 0, -30]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * .15)}, ${parseInt(meshColor[1]* .15)}, ${parseInt(meshColor[2]* .15)})`} />
+                        <Bar key={i} position={[(-(i-6) * 3) - 1.5, 0, -40]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * .15)}, ${parseInt(meshColor[1]* .15)}, ${parseInt(meshColor[2]* .15)})`} />
                     )).slice(-28, 28).reverse()
                 }
                 {
                     frequencyData.map((amp, i) => (
-                        <Bar key={i} position={[((i-6) * 3) + 1.5, 0, -30]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * .15)}, ${parseInt(meshColor[1]* .15)}, ${parseInt(meshColor[2]* .15)})`} />
+                        <Bar key={i} position={[((i-6) * 3) + 1.5, 0, -40]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * .15)}, ${parseInt(meshColor[1]* .15)}, ${parseInt(meshColor[2]* .15)})`} />
                     )).slice(-28, 28)
                 }
                 <Box rotationSpeed={volumeAvg * .005} color={`rgb(${meshColor[0]}, ${meshColor[1]}, ${meshColor[2]})`} scale={meshScale} position={[0, 0, -20]}/>
