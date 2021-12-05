@@ -23,6 +23,8 @@ const playlist = [
     '/audio/dawn.mp3',
 ];
 
+const euler = 2.71828182846;
+
 function getIndex() {
     return localStorage.getItem('audioIndex') !== null ? parseInt(localStorage.getItem('audioIndex')) : 0;
 }
@@ -101,17 +103,21 @@ export default function Home() {
         const midAvg = getBandAverage(freqData, 2, 5);
         const trebleAvg = getBandAverage(freqData, 6, 31);
         const _volumeAvg = (bassAvg + midAvg + trebleAvg) / 3;
-        setVolumeAvg(_volumeAvg);
+        setVolumeAvg(_volumeAvg * _volumeAvg / 255);
 
-        const bass = bassAvg * _bassBias;
-        const mid = midAvg * _midBias;
-        const treble = trebleAvg * _trebleBias;
+        const bass = (bassAvg*bassAvg) / 255 * _bassBias;
+        const mid = (midAvg*midAvg) / 255 * _midBias;
+        const treble = (trebleAvg*trebleAvg) / 255 * _trebleBias;
+
+        // const bass = bassAvg * _bassBias;
+        // const mid = midAvg * _midBias;
+        // const treble = trebleAvg * _trebleBias;
 
         const scaleOffset = 1;
-        const scaleMultiplier = 20;
+        const scaleMultiplier = 30;
 
         const colorOffset = 40;
-        const colorMultiplier = 0.85;
+        const colorMultiplier = 1;
         //console.log(`bass: ${bass} mid: ${mid} treble: ${treble}`);
 
         setMeshScale(scaleOffset + ((bass + mid + treble) / (255 * (_bassBias + _midBias + _trebleBias)) * scaleMultiplier));
@@ -122,7 +128,7 @@ export default function Home() {
         ]);
         localStorage.setItem('audioCurrentTime', audioFile.currentTime.toString());
 
-        //setTimeout(() => requestAnimationFrame(animate), 500);
+        //setTimeout(() => requestAnimationFrame(animate), 10);
         requestAnimationFrame(animate);
     };
 
@@ -193,7 +199,7 @@ export default function Home() {
                         <Bar key={i} position={[((i-6) * 3) + 1.5, 0, -30]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * .15)}, ${parseInt(meshColor[1]* .15)}, ${parseInt(meshColor[2]* .15)})`} />
                     )).slice(-28, 28)
                 }
-                <Box rotationSpeed={volumeAvg * .003} color={`rgb(${meshColor[0]}, ${meshColor[1]}, ${meshColor[2]})`} scale={meshScale} position={[0, 0, -20]}/>
+                <Box rotationSpeed={volumeAvg * .005} color={`rgb(${meshColor[0]}, ${meshColor[1]}, ${meshColor[2]})`} scale={meshScale} position={[0, 0, -20]}/>
                 {/*<EffectComposer>*/}
                 {/*    /!*<DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />*!/*/}
                 {/*    <Bloom luminanceThreshold={0.5} luminanceSmoothing={.5} height={50} />*/}
