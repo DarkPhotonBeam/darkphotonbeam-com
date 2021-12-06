@@ -22,7 +22,7 @@ export default function Menu() {
             <aside onMouseEnter={() => setIsInteracting(true)} onMouseLeave={() => setIsInteracting(false)} className={styles.menu + ' ' + (open ? styles.menuOpen : '')}>
                 <ul>
                     {
-                        routes.map((route, i) => <MenuLink name={route.name} path={route.path} />)
+                        routes.map((route, i) => <MenuLink key={i} name={route.name} path={route.path} />)
                     }
                 </ul>
             </aside>
