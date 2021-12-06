@@ -19,6 +19,9 @@ import Hamburger from 'hamburger-react';
 import {useRouter} from "next/router";
 import {atom, useRecoilState} from "recoil";
 import axios from "axios";
+import Link from 'next/link';
+import {isInteractingState} from '../lib/atoms';
+import Menu from '../components/Menu/Menu';
 
 
 // const playlist = [
@@ -31,16 +34,11 @@ import axios from "axios";
 //     '/audio/projectEuroMirVersion03.mp3',
 // ];
 
-const barOpacity = 0.3;
+const barOpacity = 0.1;
 
 const ecoMode = false;
 
 const euler = 2.71828182846;
-
-const isInteractingState = atom({
-    key: 'isInteractingState',
-    default: false,
-});
 
 function getIndex() {
     return localStorage.getItem('audioIndex') !== null ? parseInt(localStorage.getItem('audioIndex')) : 0;
@@ -271,7 +269,7 @@ export default function Home({ playlist }) {
         <div ref={ref} className={styles.container} style={{cursor: showMenu ? 'initial' : 'none'}} onMouseMove={e => {
             setShowMenu(true);
             if (currentMenuInterval !== null) clearInterval(currentMenuInterval);
-            if (!isInteracting) {
+            if (!isInteracting && audioFile) {
                 const interval = setInterval(() => {
                     setShowMenu(false);
                 }, 2000);
@@ -332,7 +330,7 @@ export default function Home({ playlist }) {
             }
 
             {
-                showMenu && false ? <Menu /> : ''
+                (showMenu || !audioFile) ? <Menu /> : ''
             }
 
             {
@@ -347,30 +345,6 @@ export default function Home({ playlist }) {
             }
         </div>
     )
-}
-
-function Menu() {
-    const [open, setOpen] = useState(false);
-    const [isInteracting, setIsInteracting] = useRecoilState(isInteractingState)
-
-    const router = useRouter()
-
-    return (
-        <>
-            <div onMouseEnter={() => setIsInteracting(true)} onMouseLeave={() => setIsInteracting(false)} className={styles.hamburger}>
-                <Hamburger toggled={open} toggle={setOpen} />
-            </div>
-            <aside onMouseEnter={() => setIsInteracting(true)} onMouseLeave={() => setIsInteracting(false)} className={styles.menu + ' ' + (open ? styles.menuOpen : '')}>
-                <ul>
-                    <li className={router.pathname === '/' ? styles.active : ''}>Home</li>
-                    <li>Listen</li>
-                    <li>Dan Photon</li>
-                    <li>Services</li>
-                    <li>Contact</li>
-                </ul>
-            </aside>
-        </>
-    );
 }
 
 function Bar(props) {

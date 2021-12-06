@@ -1,0 +1,48 @@
+[
+  {
+    "artist": "Dark Photon",
+    "stores": [
+      {
+        "name": "Spotify",
+        "url": "https://open.spotify.com/artist/22AziAFsYY7WXwinuPtOhs?si=1DNuVhAOQXmXMifoWsZL4w"
+      },
+      {
+        "name": "Apple Music",
+        "url": "https://music.apple.com/us/artist/dark-photon/1301484073"
+      },
+      {
+        "name": "Bandcamp",
+        "url": "https://darkphoton.bandcamp.com"
+      },
+      {
+        "name": "YouTube Music",
+        "url": "https://music.youtube.com/channel/UCem5asEiBb6quOMLwMM8apw"
+      },
+      {
+        "name": "YouTube",
+        "url": "https://www.youtube.com/channel/UCKObF-09pygh4SppyeC5aLA"
+      }
+    ]
+  },
+  {
+    "artist": "Dan Photon",
+    "stores": [
+      {
+        "name": "Spotify",
+        "url": "https://open.spotify.com/artist/1MaI7CTJ3T6otdvRTM7T5T?si=1ZQQfdO9ToafpcPSBrIvPQ"
+      },
+      {
+        "name": "Apple Music",
+        "url": "https://music.apple.com/us/artist/dan-photon/1592848723"
+      },
+      {
+        "name": "Bandcamp",
+        "url": "https://danphoton.bandcamp.com"
+      },
+      {
+        "name": "YouTube Music",
+        "url": "https://music.youtube.com/playlist?list=OLAK5uy_lXxE-0aAL1DsyoDg459if_-F6c6ALK-_o"
+      }
+    ]
+  }
+]
