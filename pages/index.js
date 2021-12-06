@@ -169,7 +169,7 @@ export default function Home() {
     }, [audioData])
 
     return (
-        <div className={styles.container} onMouseMove={e => {
+        <div className={styles.container} style={{cursor: showMenu ? 'initial' : 'hidden'}} onMouseMove={e => {
             setShowMenu(true);
             if (currentMenuInterval !== null) clearInterval(currentMenuInterval);
             const interval = setInterval(() => {
@@ -253,7 +253,7 @@ function Box(props) {
     useFrame((state, delta) => {
         ref.current.rotation.x += props.rotationSpeed * delta;
         ref.current.rotation.y += props.rotationSpeed * delta * 1.01;
-        ref.current.rotation.z += props.rotationSpeed * delta * 0.99;
+        // ref.current.rotation.z += props.rotationSpeed * delta * 0.99;
     })
     // Return the view, these are regular Threejs elements expressed in JSX
     return (
