@@ -159,7 +159,7 @@ export default function Home() {
     };
 
     useEffect(() => {
-        initAudio()
+
     }, [])
 
     useEffect(() => {
@@ -221,6 +221,16 @@ export default function Home() {
                                 <input className={styles.progressBarInput} type={'range'} min={0} max={audioFile?.duration.toString()} value={audioFile?.currentTime} onChange={(e) => audioFile.currentTime = e.target.value} />
                             </div>
                         </div>
+                    </div>
+                ) : ''
+            }
+
+            {
+                !audioFile ? (
+                    <div className={styles.startScreen}>
+                        <h1>WARNING</h1>
+                        <h4>This website may potentially trigger seizures for people with photosensitive epilepsy. Viewer discretion is advised</h4>
+                        <button onClick={initAudio} className={styles.startButton}>START</button>
                     </div>
                 ) : ''
             }
