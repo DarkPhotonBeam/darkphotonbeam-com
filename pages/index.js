@@ -318,7 +318,7 @@ export default function Home() {
             }
 
             {
-                showMenu ? <Menu /> : ''
+                showMenu && false ? <Menu /> : ''
             }
 
             {
