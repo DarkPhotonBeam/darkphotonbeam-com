@@ -169,7 +169,7 @@ export default function Home() {
     }, [audioData])
 
     return (
-        <div className={styles.container} style={{cursor: showMenu ? 'initial' : 'hidden'}} onMouseMove={e => {
+        <div className={styles.container} style={{cursor: showMenu ? 'initial' : 'none'}} onMouseMove={e => {
             setShowMenu(true);
             if (currentMenuInterval !== null) clearInterval(currentMenuInterval);
             const interval = setInterval(() => {
