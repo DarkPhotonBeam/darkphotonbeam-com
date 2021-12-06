@@ -406,7 +406,7 @@ function Box(props) {
     )
 }
 
-export async function getStaticProps(context) {
+export async function getServerSideProps(context) {
     const res = await axios.get('https://cdn.darkphotonbeam.com/api/files?path=/audio/darkphoton');
     const data = res.data;
 
