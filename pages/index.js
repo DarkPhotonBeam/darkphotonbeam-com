@@ -18,17 +18,18 @@ import {MdPause, MdPlayArrow, MdSkipNext, MdSkipPrevious} from "react-icons/md";
 import Hamburger from 'hamburger-react';
 import {useRouter} from "next/router";
 import {atom, useRecoilState} from "recoil";
+import axios from "axios";
 
 
-const playlist = [
-    '/audio/executeVersion02.mp3',
-    '/audio/buildVersion01.mp3',
-    '/audio/circlesVersion02.mp3',
-    '/audio/dawn.mp3',
-    '/audio/goodMorningGoodNight.mp3',
-    '/audio/woodsVersion01.mp3',
-    '/audio/projectEuroMirVersion03.mp3',
-];
+// const playlist = [
+//     '/audio/executeVersion02.mp3',
+//     '/audio/buildVersion01.mp3',
+//     '/audio/circlesVersion02.mp3',
+//     '/audio/dawn.mp3',
+//     '/audio/goodMorningGoodNight.mp3',
+//     '/audio/woodsVersion01.mp3',
+//     '/audio/projectEuroMirVersion03.mp3',
+// ];
 
 const barOpacity = 0.3;
 
@@ -55,7 +56,7 @@ function thres(value, threshold) {
     return value > threshold ? value - threshold : 0;
 }
 
-export default function Home() {
+export default function Home({ playlist }) {
     const [audioData, setAudioData] = useState(null);
     const [meshScale, setMeshScale] = useState(1);
     const [meshColor, setMeshColor] = useState([255, 255, 255]);
@@ -76,6 +77,10 @@ export default function Home() {
     const [currentMenuInterval, setCurrentMenuInterval] = useState(null);
 
     const [isInteracting, setIsInteracting] = useRecoilState(isInteractingState);
+
+    useEffect(() => {
+        console.log(playlist);
+    }, [])
 
     //const [progress, setProgress] = useState();
 
@@ -101,6 +106,7 @@ export default function Home() {
         const index = getIndex();
         const soundFile = playlist[index];
         const _audioFile = new Audio(soundFile)
+        _audioFile.setAttribute('crossOrigin', 'anonymous');
         const currentTime = localStorage.getItem('audioCurrentTime');
         if (currentTime !== null) _audioFile.currentTime = parseFloat(currentTime);
         const audioContext = new AudioContext();
@@ -398,4 +404,23 @@ function Box(props) {
             <meshStandardMaterial color={hovered ? 'red' : props.color}/>
         </mesh>
     )
+}
+
+export async function getStaticProps(context) {
+    const res = await axios.get('https://cdn.darkphotonbeam.com/api/files?path=/audio/darkphoton');
+    const data = res.data;
+
+    if (!data) {
+        return {
+            notFound: true,
+        }
+    }
+
+    const playlist = data.files.map((file) => {
+        return file.url;
+    });
+
+    return {
+        props: { playlist }, // will be passed to the page component as props
+    }
 }

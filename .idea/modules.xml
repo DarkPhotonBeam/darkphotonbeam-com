@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../cdn-darkphotonbeam-com/.idea/cdn-darkphotonbeam-com.iml" filepath="$PROJECT_DIR$/../cdn-darkphotonbeam-com/.idea/cdn-darkphotonbeam-com.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/darkphotonbeam-com.iml" filepath="$PROJECT_DIR$/.idea/darkphotonbeam-com.iml" />
     </modules>
   </component>
