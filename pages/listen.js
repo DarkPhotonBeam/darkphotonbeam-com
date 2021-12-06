@@ -1,5 +1,7 @@
 import artists from '../public/json/listen.json';
 import {SiApplemusic, SiBandcamp, SiSpotify, SiYoutube, SiYoutubemusic} from "react-icons/si";
+import Layout from "../components/Layout/Layout";
+import styles from '../styles/Listen.module.scss';
 
 function getIcon(storeName) {
     switch (storeName) {
@@ -20,12 +22,12 @@ function getIcon(storeName) {
 
 export default function Listen() {
     return (
-        <div>
+        <Layout>
             <h1>Listen To My Music</h1>
             {
                 artists.map((artist, i) => <Artist key={i} artist={artist}/>)
             }
-        </div>
+        </Layout>
     );
 }
 
@@ -33,7 +35,7 @@ function Artist({artist}) {
     return (
         <div>
             <h2>{artist.artist}</h2>
-            <ul>
+            <ul className={styles.storeList}>
                 {
                     artist.stores.map((store, i) => <Link key={i} store={store}/>)
                 }

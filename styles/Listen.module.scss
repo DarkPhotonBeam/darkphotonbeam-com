@@ -1,5 +1,26 @@
 @import 'mixins';
 
-.container {
-  
+.storeList {
+  list-style: none;
+
+  font-size: 2rem;
+
+  li {
+    color: $c-inactive;
+
+    a {
+      display: flex;
+      align-items: center;
+
+      svg {
+        margin-right: 1rem;
+      }
+
+    }
+
+    &:hover {
+      color: $c-text;
+    }
+    margin-bottom: 1rem;
+  }
 }

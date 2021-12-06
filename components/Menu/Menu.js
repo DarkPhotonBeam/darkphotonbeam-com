@@ -5,13 +5,14 @@ import Hamburger from "hamburger-react";
 import Link from "next/link";
 import {isInteractingState} from '../../lib/atoms';
 import {useState} from "react";
+import routes from '../../public/json/routes.json';
 
 
 export default function Menu() {
     const [open, setOpen] = useState(false);
     const [isInteracting, setIsInteracting] = useRecoilState(isInteractingState)
 
-    const router = useRouter()
+
 
     return (
         <>
@@ -20,13 +21,19 @@ export default function Menu() {
             </div>
             <aside onMouseEnter={() => setIsInteracting(true)} onMouseLeave={() => setIsInteracting(false)} className={styles.menu + ' ' + (open ? styles.menuOpen : '')}>
                 <ul>
-                    <li className={router.pathname === '/' ? styles.active : ''}><Link href={'/'}>Home</Link></li>
-                    <li><Link href={'/listen'}>Listen</Link></li>
-                    <li>Dan Photon</li>
-                    <li>Services</li>
-                    <li>Contact</li>
+                    {
+                        routes.map((route, i) => <MenuLink name={route.name} path={route.path} />)
+                    }
                 </ul>
             </aside>
         </>
+    );
+}
+
+function MenuLink({name, path}) {
+    const router = useRouter()
+
+    return (
+        <li className={router.pathname === path ? styles.active : ''}><Link href={path}>{name}</Link></li>
     );
 }
