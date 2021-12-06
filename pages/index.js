@@ -58,7 +58,7 @@ export default function Home() {
 
     const playNextTrack = () => {
         const index = getIndex();
-        const nextIndex = index + 1 >= playlist.length - 1 ? 0 : index + 1;
+        const nextIndex = index + 1 >= playlist.length ? 0 : index + 1;
         playTrack(nextIndex);
     };
 
