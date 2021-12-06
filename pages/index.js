@@ -247,8 +247,14 @@ export default function Home() {
     const abberationThreshold = .3;
     const abberationMultiplier = 0.02;
 
+    const ref = useRef(null);
+
+    const getContainerRatio = () => {
+        return ref.current !== null ? ref.current.offsetHeight / ref.current.offsetWidth : .5;
+    };
+
     return (
-        <div className={styles.container} style={{cursor: showMenu ? 'initial' : 'none'}} onMouseMove={e => {
+        <div ref={ref} className={styles.container} style={{cursor: showMenu ? 'initial' : 'none'}} onMouseMove={e => {
             setShowMenu(true);
             if (currentMenuInterval !== null) clearInterval(currentMenuInterval);
             if (!isInteracting) {
@@ -284,7 +290,7 @@ export default function Home() {
                             {/*<DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />*/}
                             <ChromaticAberration blendFunction={BlendFunction.NORMAL} offset={[thres(biasedVolumeAvg, abberationThreshold) * abberationMultiplier, thres(biasedVolumeAvg, abberationThreshold) * abberationMultiplier]} />
                             <Bloom luminanceThreshold={0.2} luminanceSmoothing={.5} height={50} />
-                            <Scanline blendFunction={BlendFunction.OVERLAY} />
+                            <Scanline blendFunction={BlendFunction.OVERLAY} density={2 * getContainerRatio()} />
                             <Noise opacity={0.05} />
                         </EffectComposer>
                     ) : ''
