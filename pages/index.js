@@ -290,7 +290,7 @@ export default function Home() {
                             {/*<DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />*/}
                             <ChromaticAberration blendFunction={BlendFunction.NORMAL} offset={[thres(biasedVolumeAvg, abberationThreshold) * abberationMultiplier, thres(biasedVolumeAvg, abberationThreshold) * abberationMultiplier]} />
                             <Bloom luminanceThreshold={0.2} luminanceSmoothing={.5} height={50} />
-                            <Scanline blendFunction={BlendFunction.OVERLAY} density={2 * getContainerRatio()} />
+                            <Scanline blendFunction={BlendFunction.OVERLAY} opacity={biasedVolumeAvg} density={2 * getContainerRatio()} />
                             <Noise opacity={0.05} />
                         </EffectComposer>
                     ) : ''
