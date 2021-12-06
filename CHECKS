@@ -1,0 +1,6 @@
+# Config
+WAIT=3
+TIMEOUT=15
+ATTEMPTS=2
+
+# Check Requests
