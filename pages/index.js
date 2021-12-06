@@ -73,7 +73,6 @@ export default function Home({ playlist }) {
 
     const [showMenu, setShowMenu] = useState(false);
     const [currentMenuInterval, setCurrentMenuInterval] = useState(null);
-
     const [isInteracting, setIsInteracting] = useRecoilState(isInteractingState);
 
     useEffect(() => {
