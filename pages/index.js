@@ -6,7 +6,7 @@ import {useEffect, useRef, useState} from "react"
 import {
     Bloom,
     ChromaticAberration,
-    DepthOfField,
+    DepthOfField, DotScreen,
     EffectComposer,
     Glitch,
     Noise, Scanline,
@@ -43,6 +43,16 @@ const isInteractingState = atom({
 
 function getIndex() {
     return localStorage.getItem('audioIndex') !== null ? parseInt(localStorage.getItem('audioIndex')) : 0;
+}
+
+// Limiter function
+function lim(value, min, max) {
+    return Math.max(Math.min(value, max), min);
+}
+
+// Threshold function
+function thres(value, threshold) {
+    return value > threshold ? value - threshold : 0;
 }
 
 export default function Home() {
@@ -187,11 +197,30 @@ export default function Home() {
     };
 
     useEffect(() => {
-
-    }, [])
-
-    useEffect(() => {
         if (audioData !== null) {
+            console.log('START');
+
+            window.addEventListener('keypress', e => {
+                switch (e.key) {
+                    case ' ':
+                        e.preventDefault();
+                        if (audioFile.paused) {
+                            audioFile.play();
+                        } else {
+                            audioFile.pause();
+                        }
+                        break;
+                    case 'a':
+                        e.preventDefault();
+                        playPreviousTrack();
+                        break;
+                    case 'd':
+                        e.preventDefault();
+                        playNextTrack();
+                        break;
+                }
+            })
+
             requestAnimationFrame(animate);
         }
     }, [audioData])
@@ -199,18 +228,24 @@ export default function Home() {
     let _biasedBarOpacity;
     let _barSpacing;
     let _barOffset;
+    let _barGirth;
     if (ecoMode) {
         _biasedBarOpacity = barOpacity;
         _barSpacing = 3;
         _barOffset = 0;
+        _barGirth = 0.5;
     } else {
         _biasedBarOpacity = barOpacity + treble / 255 * (1 - barOpacity);
         _barSpacing = (6 * (bass / 255));
         _barOffset = (biasedVolumeAvg * 40);
+        _barGirth = (biasedVolumeAvg) * 2;
     }
     const biasedBarOpacity = _biasedBarOpacity;
     const barSpacing = _barSpacing;
     const barOffset = _barOffset;
+    const barGirth = _barGirth;
+    const abberationThreshold = .3;
+    const abberationMultiplier = 0.02;
 
     return (
         <div className={styles.container} style={{cursor: showMenu ? 'initial' : 'none'}} onMouseMove={e => {
@@ -234,12 +269,12 @@ export default function Home() {
                 <pointLight position={[10, 10, 10]}/>
                 {
                     frequencyData.map((amp, i) => (
-                        <Bar key={i} position={[(-(i-6) * barSpacing) - barSpacing * .5, 0, -40 - barOffset]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * biasedBarOpacity)}, ${parseInt(meshColor[1]* biasedBarOpacity)}, ${parseInt(meshColor[2]* biasedBarOpacity)})`} />
+                        <Bar key={i} girth={barGirth} position={[(-(i-6) * barSpacing) - barSpacing * .5, 0, -40 - barOffset]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * biasedBarOpacity)}, ${parseInt(meshColor[1]* biasedBarOpacity)}, ${parseInt(meshColor[2]* biasedBarOpacity)})`} />
                     )).slice(-30, 30).reverse()
                 }
                 {
                     frequencyData.map((amp, i) => (
-                        <Bar key={i} position={[((i-6) * barSpacing) + barSpacing * .5, 0, -40 - barOffset]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * biasedBarOpacity)}, ${parseInt(meshColor[1]* biasedBarOpacity)}, ${parseInt(meshColor[2]* biasedBarOpacity)})`} />
+                        <Bar key={i} girth={barGirth} position={[((i-6) * barSpacing) + barSpacing * .5, 0, -40 - barOffset]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * biasedBarOpacity)}, ${parseInt(meshColor[1]* biasedBarOpacity)}, ${parseInt(meshColor[2]* biasedBarOpacity)})`} />
                     )).slice(-30, 30)
                 }
                 <Box rotationSpeed={volumeAvg * .007} color={`rgb(${meshColor[0]}, ${meshColor[1]}, ${meshColor[2]})`} scale={meshScale} position={[0, 0, -20]}/>
@@ -247,6 +282,7 @@ export default function Home() {
                     !ecoMode ? (
                         <EffectComposer>
                             {/*<DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />*/}
+                            <ChromaticAberration blendFunction={BlendFunction.NORMAL} offset={[thres(biasedVolumeAvg, abberationThreshold) * abberationMultiplier, thres(biasedVolumeAvg, abberationThreshold) * abberationMultiplier]} />
                             <Bloom luminanceThreshold={0.2} luminanceSmoothing={.5} height={50} />
                             <Scanline blendFunction={BlendFunction.OVERLAY} />
                             <Noise opacity={0.05} />
@@ -325,7 +361,7 @@ function Bar(props) {
 
     return (
         <mesh ref={ref} scale={props.scale} position={props.position}>
-            <boxGeometry args={[.5, props.height, .5]} />
+            <boxGeometry args={[props.girth, props.height, props.girth]} />
             <meshStandardMaterial color={props.color} />
         </mesh>
     );
