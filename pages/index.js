@@ -32,6 +32,8 @@ const playlist = [
 
 const barOpacity = 0.3;
 
+const ecoMode = false;
+
 const euler = 2.71828182846;
 
 const isInteractingState = atom({
@@ -56,9 +58,9 @@ export default function Home() {
     const [volumeAvg, setVolumeAvg] = useState(0);
     const [biasedVolumeAvg, setBiasedVolumeAvg] = useState(0);
 
-    const [bass, setBass] = useState(0);
-    const [mid, setMid] = useState(0);
-    const [treble, setTreble] = useState(0);
+    const [bass, setBass] = useState(127);
+    const [mid, setMid] = useState(127);
+    const [treble, setTreble] = useState(127);
 
     const [showMenu, setShowMenu] = useState(false);
     const [currentMenuInterval, setCurrentMenuInterval] = useState(null);
@@ -152,9 +154,11 @@ export default function Home() {
         const _mid = (midAvg*midAvg) / 255 * _midBias;
         const _treble = (trebleAvg*trebleAvg) / 255 * _trebleBias;
 
-        setBass(_bass);
-        setMid(_mid);
-        setTreble(_treble);
+        if (!ecoMode) {
+            setBass(_bass);
+            setMid(_mid);
+            setTreble(_treble);
+        }
 
         // const _bass = bassAvg * _bassBias;
         // const _mid = midAvg * _midBias;
@@ -192,7 +196,21 @@ export default function Home() {
         }
     }, [audioData])
 
-    const biasedBarOpacity = barOpacity + treble / 255 * (1 - barOpacity);
+    let _biasedBarOpacity;
+    let _barSpacing;
+    let _barOffset;
+    if (ecoMode) {
+        _biasedBarOpacity = barOpacity;
+        _barSpacing = 3;
+        _barOffset = 0;
+    } else {
+        _biasedBarOpacity = barOpacity + treble / 255 * (1 - barOpacity);
+        _barSpacing = (6 * (bass / 255));
+        _barOffset = (biasedVolumeAvg * 40);
+    }
+    const biasedBarOpacity = _biasedBarOpacity;
+    const barSpacing = _barSpacing;
+    const barOffset = _barOffset;
 
     return (
         <div className={styles.container} style={{cursor: showMenu ? 'initial' : 'none'}} onMouseMove={e => {
@@ -216,12 +234,12 @@ export default function Home() {
                 <pointLight position={[10, 10, 10]}/>
                 {
                     frequencyData.map((amp, i) => (
-                        <Bar key={i} position={[(-(i-6) * (6 * (bass / 255))) - (3 * (bass / 255)), 0, -40 - (biasedVolumeAvg * 40)]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * biasedBarOpacity)}, ${parseInt(meshColor[1]* biasedBarOpacity)}, ${parseInt(meshColor[2]* biasedBarOpacity)})`} />
+                        <Bar key={i} position={[(-(i-6) * barSpacing) - barSpacing * .5, 0, -40 - barOffset]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * biasedBarOpacity)}, ${parseInt(meshColor[1]* biasedBarOpacity)}, ${parseInt(meshColor[2]* biasedBarOpacity)})`} />
                     )).slice(-30, 30).reverse()
                 }
                 {
                     frequencyData.map((amp, i) => (
-                        <Bar key={i} position={[((i-6) * (6 * (bass / 255))) + (3 * (bass / 255)), 0, -40 - (biasedVolumeAvg * 40)]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * biasedBarOpacity)}, ${parseInt(meshColor[1]* biasedBarOpacity)}, ${parseInt(meshColor[2]* biasedBarOpacity)})`} />
+                        <Bar key={i} position={[((i-6) * barSpacing) + barSpacing * .5, 0, -40 - barOffset]} height={amp / 255 * 64} color={`rgb(${parseInt(meshColor[0] * biasedBarOpacity)}, ${parseInt(meshColor[1]* biasedBarOpacity)}, ${parseInt(meshColor[2]* biasedBarOpacity)})`} />
                     )).slice(-30, 30)
                 }
                 <Box rotationSpeed={volumeAvg * .007} color={`rgb(${meshColor[0]}, ${meshColor[1]}, ${meshColor[2]})`} scale={meshScale} position={[0, 0, -20]}/>
