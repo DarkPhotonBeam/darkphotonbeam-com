@@ -110,7 +110,7 @@ export default function Home() {
         _audioFile.volume = 1;
         analyser.fftSize = 64
         analyser.maxDecibels = -10;
-        analyser.smoothingTimeConstant = 0.75; // DEFAULT: 0.8
+        analyser.smoothingTimeConstant = 0.65; // DEFAULT: 0.8
         source.connect(audioContext.destination);
         source.connect(analyser);
         _audioFile.play().then(() => {
