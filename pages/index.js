@@ -102,22 +102,30 @@ export default function Home({ playlist }) {
         playTrack(nextIndex);
     };
 
-    const initAudio = () => {
+    const initAudio = async (streamMode = false) => {
         const index = getIndex();
-        const soundFile = playlist[index];
-        const _audioFile = new Audio(soundFile)
+        console.log(streamMode);
+        const soundFile = streamMode ? await navigator.mediaDevices.getUserMedia({audio: true, video: false}) : playlist[index];
+        const _audioFile = new Audio()
         _audioFile.setAttribute('crossOrigin', 'anonymous');
         const currentTime = localStorage.getItem('audioCurrentTime');
         if (currentTime !== null) _audioFile.currentTime = parseFloat(currentTime);
         const audioContext = new AudioContext();
         const source = audioContext.createMediaElementSource(_audioFile);
+        const gainNode = audioContext.createGain();
+        gainNode.gain.setValueAtTime(streamMode ? 0 : 1, audioContext.currentTime);
         const analyser = audioContext.createAnalyser();
-        _audioFile.src = soundFile;
-        _audioFile.volume = 1;
+        if (streamMode)
+            _audioFile.srcObject = soundFile;
+        else
+            _audioFile.src = soundFile;
+        _audioFile.volume = streamMode ? 0 : 1;
         analyser.fftSize = 64
         analyser.maxDecibels = -10;
         analyser.smoothingTimeConstant = 0.65; // DEFAULT: 0.8
-        source.connect(audioContext.destination);
+
+        source.connect(gainNode);
+        gainNode.connect(audioContext.destination);
         source.connect(analyser);
         _audioFile.play().then(() => {
             //console.log(analyser);
@@ -332,7 +340,8 @@ export default function Home({ playlist }) {
                     <div className={styles.startScreen}>
                         <h1>WARNING</h1>
                         <h4>This website may potentially trigger seizures for people with photosensitive epilepsy. Viewer discretion is advised</h4>
-                        <button onClick={initAudio} className={styles.startButton}>START</button>
+                        <button onClick={() => initAudio(false)} className={styles.startButton}>START</button>
+                        <button onClick={() => initAudio(true)} className={styles.startButton}>VISUALIZE INPUT</button>
                     </div>
                 ) : ''
             }
