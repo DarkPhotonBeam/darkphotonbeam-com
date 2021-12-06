@@ -243,12 +243,16 @@ export default function Home() {
                     )).slice(-30, 30)
                 }
                 <Box rotationSpeed={volumeAvg * .007} color={`rgb(${meshColor[0]}, ${meshColor[1]}, ${meshColor[2]})`} scale={meshScale} position={[0, 0, -20]}/>
-                {/*<EffectComposer>*/}
-                {/*    /!*<DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />*!/*/}
-                {/*    <Bloom luminanceThreshold={0.5} luminanceSmoothing={.5} height={50} />*/}
-                {/*    <Scanline blendFunction={BlendFunction.OVERLAY} />*/}
-                {/*    <Noise opacity={0.05} />*/}
-                {/*</EffectComposer>*/}
+                {
+                    !ecoMode ? (
+                        <EffectComposer>
+                            {/*<DepthOfField focusDistance={0} focalLength={0.02} bokehScale={2} height={480} />*/}
+                            <Bloom luminanceThreshold={0.2} luminanceSmoothing={.5} height={50} />
+                            <Scanline blendFunction={BlendFunction.OVERLAY} />
+                            <Noise opacity={0.05} />
+                        </EffectComposer>
+                    ) : ''
+                }
             </Canvas>
 
             {
