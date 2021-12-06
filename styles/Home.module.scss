@@ -27,12 +27,16 @@
 }
 
 .icon {
-  font-size: 4rem;
+  font-size: 2rem;
   color: $c-inactive;
 
   &:hover {
     cursor: pointer;
     color: $c-text;
+  }
+
+  @include res('lg') {
+    font-size: 4rem;
   }
 }
 
@@ -177,4 +181,65 @@
     color: $c-text;
     cursor: pointer;
   }
+}
+
+.hamburger {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 3500;
+
+  @include res('lg') {
+    top: 2rem;
+    left: 2rem;
+  }
+}
+
+.menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  transform: translateX(-100%);
+  background: $c-bg;
+  z-index: 3000;
+  transition: transform 250ms ease-in-out;
+
+  padding: 4rem 2rem;
+
+  ul {
+    color: $c-text;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    text-transform: uppercase;
+
+    li {
+      margin: 2rem 0;
+      font-size: 1rem;
+      transition: transform 150ms ease-in-out;
+
+      @include res('lg') {
+        font-size: 2rem;
+      }
+
+      &:hover {
+        cursor: pointer;
+        transform: translateX(1rem);
+      }
+    }
+  }
+}
+
+.active {
+  cursor: pointer;
+  transform: translateX(1rem);
+}
+
+.menuOpen {
+  transform: translateX(0);
 }

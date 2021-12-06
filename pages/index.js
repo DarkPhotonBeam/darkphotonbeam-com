@@ -15,6 +15,9 @@ import {
 import {BlendFunction} from "postprocessing";
 import {MdPause, MdPlayArrow, MdSkipNext, MdSkipPrevious} from "react-icons/md";
 //import song from '../public/audio/song.mp3'
+import Hamburger from 'hamburger-react';
+import {useRouter} from "next/router";
+import {atom, useRecoilState} from "recoil";
 
 
 const playlist = [
@@ -28,6 +31,11 @@ const playlist = [
 ];
 
 const euler = 2.71828182846;
+
+const isInteractingState = atom({
+    key: 'isInteractingState',
+    default: false,
+});
 
 function getIndex() {
     return localStorage.getItem('audioIndex') !== null ? parseInt(localStorage.getItem('audioIndex')) : 0;
@@ -47,6 +55,8 @@ export default function Home() {
 
     const [showMenu, setShowMenu] = useState(false);
     const [currentMenuInterval, setCurrentMenuInterval] = useState(null);
+
+    const [isInteracting, setIsInteracting] = useRecoilState(isInteractingState);
 
     //const [progress, setProgress] = useState();
 
@@ -172,10 +182,12 @@ export default function Home() {
         <div className={styles.container} style={{cursor: showMenu ? 'initial' : 'none'}} onMouseMove={e => {
             setShowMenu(true);
             if (currentMenuInterval !== null) clearInterval(currentMenuInterval);
-            const interval = setInterval(() => {
-                setShowMenu(false);
-            }, 1500);
-            setCurrentMenuInterval(interval);
+            if (!isInteracting) {
+                const interval = setInterval(() => {
+                    setShowMenu(false);
+                }, 2000);
+                setCurrentMenuInterval(interval);
+            }
         }}>
             <Head>
                 <title>Dark Photon</title>
@@ -207,7 +219,7 @@ export default function Home() {
 
             {
                 audioFile && showMenu ? (
-                    <div className={styles.controls}>
+                    <div onMouseEnter={() => setIsInteracting(true)} onMouseLeave={() => setIsInteracting(false)} className={styles.controls}>
                         <div className={styles.buttons}>
                             <MdSkipPrevious className={styles.icon} onClick={playPreviousTrack} />
                             {audioFile?.paused ? <MdPlayArrow className={styles.icon} onClick={() => audioFile.play()}/> : <MdPause className={styles.icon} onClick={() => audioFile.pause()}/>}
@@ -226,6 +238,10 @@ export default function Home() {
             }
 
             {
+                showMenu ? <Menu /> : ''
+            }
+
+            {
                 !audioFile ? (
                     <div className={styles.startScreen}>
                         <h1>WARNING</h1>
@@ -236,6 +252,30 @@ export default function Home() {
             }
         </div>
     )
+}
+
+function Menu() {
+    const [open, setOpen] = useState(false);
+    const [isInteracting, setIsInteracting] = useRecoilState(isInteractingState)
+
+    const router = useRouter()
+
+    return (
+        <>
+            <div onMouseEnter={() => setIsInteracting(true)} onMouseLeave={() => setIsInteracting(false)} className={styles.hamburger}>
+                <Hamburger toggled={open} toggle={setOpen} />
+            </div>
+            <aside onMouseEnter={() => setIsInteracting(true)} onMouseLeave={() => setIsInteracting(false)} className={styles.menu + ' ' + (open ? styles.menuOpen : '')}>
+                <ul>
+                    <li className={router.pathname === '/' ? styles.active : ''}>Home</li>
+                    <li>Listen</li>
+                    <li>Dan Photon</li>
+                    <li>Services</li>
+                    <li>Contact</li>
+                </ul>
+            </aside>
+        </>
+    );
 }
 
 function Bar(props) {
