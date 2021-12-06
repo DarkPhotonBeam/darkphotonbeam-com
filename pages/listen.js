@@ -47,7 +47,7 @@ function Artist({artist}) {
 function Link({store}) {
     return (
         <li>
-            <a target={'_blank'} href={store.url}>{getIcon(store.name)} {store.name}</a>
+            <a rel="noreferrer" target={'_blank'} href={store.url}>{getIcon(store.name)} {store.name}</a>
         </li>
     );
 }
