@@ -140,7 +140,7 @@ export default function Home() {
         // const treble = trebleAvg * _trebleBias;
 
         const scaleOffset = 1;
-        const scaleMultiplier = 30;
+        const scaleMultiplier = document.innerWidth < 1000 ? 20 : 30;
 
         const colorOffset = 40;
         const colorMultiplier = 1;
