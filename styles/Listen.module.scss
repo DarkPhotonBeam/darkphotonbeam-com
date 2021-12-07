@@ -3,7 +3,11 @@
 .storeList {
   list-style: none;
 
-  font-size: 2rem;
+  font-size: 1.25rem;
+
+  @include res('lg') {
+    font-size: 2rem;
+  }
 
   li {
     color: $c-inactive;
