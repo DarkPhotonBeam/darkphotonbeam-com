@@ -11,16 +11,16 @@ function Cards({children}) {
 function Card({title, subtitle, description, sections, href}) {
     return (
         <a className={styles.card} href={href} rel={'noreferrer'}>
-            <h2>{title}</h2>
-            <h3>{subtitle}</h3>
-            <p>{description}</p>
+            <h2 className={styles.title}>{title}</h2>
+            <h3 className={styles.subtitle}>{subtitle}</h3>
+            <p className={styles.description}>{description}</p>
             {
                 sections.map((s, i) => (
                     <div key={i} className={styles.section}>
                         {
-                            s.title ? <h3>{s.title}</h3> : ''
+                            s.title ? <h3 className={styles.sectionTitle}>{s.title}</h3> : ''
                         }
-                        <p>{s.description}</p>
+                        <p className={styles.sectionDescription}>{s.description}</p>
                     </div>
                 ))
             }

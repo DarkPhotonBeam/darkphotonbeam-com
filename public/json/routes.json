@@ -6,5 +6,9 @@
   {
     "name": "Listen",
     "path": "/listen"
+  },
+  {
+    "name": "Services",
+    "path": "/services"
   }
 ]

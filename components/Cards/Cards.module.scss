@@ -3,16 +3,57 @@
 .cards {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
+  //overflow-x: hidden;
 }
 
 .card {
+  background: #111;
+  border-radius: .5rem;
   display: flex;
   flex-direction: column;
   max-width: 20rem;
+  transition: transform 100ms ease-in-out;
+  margin: 1rem 1rem;
+  padding: 1rem 1rem;
 
-  > p {
-    flex-grow: 1;
+
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.1);
   }
+}
+
+.title {
+  margin-bottom: 0;
+  font-size: 1.5rem;
+}
+
+.subtitle {
+  color: $c-gray;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.description {
+  flex-grow: 1;
+  padding-bottom: 2rem;
+}
+
+.arrowLeft {
+
+}
+
+.arrowRight {
+
+}
+
+.sectionTitle {
+  font-size: 1.1rem;
+}
+
+.sectionDescription {
+
 }
 
 .section {
