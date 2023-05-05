@@ -22,6 +22,7 @@ import axios from "axios";
 import Link from 'next/link';
 import {isInteractingState} from '../lib/atoms';
 import Menu from '../components/Menu/Menu';
+//import * as axios from 'axios';
 
 
 // const playlist = [
@@ -54,7 +55,8 @@ function thres(value, threshold) {
     return value > threshold ? value - threshold : 0;
 }
 
-export default function Home({ playlist }) {
+export default function Home({  }) {
+    const [playlist, setPlaylist] = useState([]);
     const [audioData, setAudioData] = useState(null);
     const [meshScale, setMeshScale] = useState(1);
     const [meshColor, setMeshColor] = useState([255, 255, 255]);
@@ -76,6 +78,23 @@ export default function Home({ playlist }) {
     const [isInteracting, setIsInteracting] = useRecoilState(isInteractingState);
 
     useEffect(() => {
+        (async () => {
+            const res = await axios.get('https://cdn.darkphotonbeam.com/api/files?path=/audio/darkphoton');
+            const data = res.data;
+
+            if (!data) {
+                return {
+                    notFound: true,
+                }
+            }
+
+            const _playlist = data.files.map((file) => {
+                return file.url;
+            });
+
+            setPlaylist(_playlist);
+        })();
+
         console.log(playlist);
     }, [])
 
@@ -386,23 +405,4 @@ function Box(props) {
             <meshStandardMaterial color={hovered ? 'red' : props.color}/>
         </mesh>
     )
-}
-
-export async function getServerSideProps(context) {
-    const res = await axios.get('https://cdn.darkphotonbeam.com/api/files?path=/audio/darkphoton');
-    const data = res.data;
-
-    if (!data) {
-        return {
-            notFound: true,
-        }
-    }
-
-    const playlist = data.files.map((file) => {
-        return file.url;
-    });
-
-    return {
-        props: { playlist }, // will be passed to the page component as props
-    }
 }
